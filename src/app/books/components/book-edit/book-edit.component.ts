@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 import { Book } from '../../model/book';
 import { BooksService } from '../../services/books.service';
 
@@ -16,7 +17,7 @@ export class BookEditComponent {
   readonly bookForm = this.formBuilder.group({
     title: ['', Validators.required],
     author: ['', Validators.required],
-    year: [0, [Validators.required, Validators.min(0)]],
+    year: [0, [Validators.required, Validators.min(1)]],
     description: ['', Validators.required],
   });
   isSaving = false;
@@ -48,7 +49,7 @@ export class BookEditComponent {
       ...this.bookForm.getRawValue(),
     };
 
-    this.booksService.updateBook(updatedBook).subscribe({
+    this.booksService.updateBook(updatedBook).pipe(take(1)).subscribe({
       next: () => this.router.navigate(['/books']),
       error: () => {
         this.isSaving = false;
