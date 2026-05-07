@@ -14,10 +14,11 @@ import { BooksService } from '../../services/books.service';
 })
 export class BookEditComponent {
   readonly book: Book;
+  readonly currentYear = new Date().getFullYear();
   readonly bookForm = this.formBuilder.group({
     title: ['', Validators.required],
     author: ['', Validators.required],
-    year: [0, [Validators.required, Validators.min(1)]],
+    year: [0, [Validators.required, Validators.min(1), Validators.max(this.currentYear)]],
     description: ['', Validators.required],
   });
   isSaving = false;
